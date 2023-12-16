@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Json to ChartJs</title>
+</head>
+<style>
+    /* Styles for canvas */
+    canvas#myChart {
+        width: 2000px;
+        height: 300px;
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    /* Styles for body */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        width:800px;
+        height: 500px;
+    }
+
+    /* Styles for row with margin-top */
+    .row.mt-5 {
+        margin-top: 20px;
+        display: flex;
+    
+    }
+
+    /* Styles for form container */
+    .col-md-4.mt-2 {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width:255px;
+        height: 500px;
+    }
+
+    /* Styles for form elements */
+    
+    form input[type="submit"] {
+        margin-top: 10px;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        background-color: #3498db;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        transition: background-color 0.3s ease;
+    }
+
+    form input[type="submit"]:hover {
+        background-color: #2980b9;
+        display: flex;
+    }
+</style>
+<body>
+    <div class="row mt-5">
+        <div class="col-md-4 mt-2">
+            <h3>Add Data</h3>
+            <hr>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form }}
+                <input class="btn btn-success mt-2" type="submit" value="Add Data">
+            </form>
+        </div>
+        <div class="col-md-8">
+            <canvas id="myChart" width="400" height="250"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [{% for data in data %}'{{ data.topic }}',{% endfor %}],
+                        datasets: [{
+                            label: '# Intensity',
+                            data: [{% for data in data %}{{ data.intensity }},{% endfor %}],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.8)',
+                                'rgba(54, 162, 235, 0.8)',
+                                'rgba(255, 206, 86, 0.8)',
+                                'rgba(75, 192, 192, 0.8)',
+                                'rgba(153, 102, 255, 0.8)',
+                                'rgba(255, 159, 64, 0.8)',
+                                'rgba(240, 120, 50, 0.8)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(240, 120, 50, 1)',
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html>
